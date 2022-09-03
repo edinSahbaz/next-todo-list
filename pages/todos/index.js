@@ -38,12 +38,16 @@ const Todos = () => {
 
   const addTodo = async () => {
     const Author = auth.currentUser.email;
-    const Completed = false;
-    const newData = { Author, Title, Descritpion, Completed };
 
-    const todosCollectionRef = collection(db, "Todos");
-
-    await addDoc(todosCollectionRef, newData);
+    var res = fetch(
+      `http://localhost:3000/api/todo?a=${Author}&t=${Title}&d=${Descritpion}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
   };
 
   const filterBySearch = (e) => {
