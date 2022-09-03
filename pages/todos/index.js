@@ -12,6 +12,8 @@ const Todos = () => {
   const [todos, setTodos] = useState([]);
   const [display, setDisplay] = useState(false);
 
+  const [filteredList, setFilteredList] = useState(todos);
+
   const [Title, setTitle] = useState("");
   const [Descritpion, setDescription] = useState("");
 
@@ -30,6 +32,10 @@ const Todos = () => {
     router.push("/todos/my-todos");
   };
 
+  const randTodos = () => {
+    router.push("/todos/random");
+  };
+
   const addTodo = async () => {
     const Author = auth.currentUser.email;
     const Completed = false;
@@ -38,6 +44,19 @@ const Todos = () => {
     const todosCollectionRef = collection(db, "Todos");
 
     await addDoc(todosCollectionRef, newData);
+  };
+
+  const filterBySearch = (e) => {
+    // Access input value
+    const query = e.target.value.toLowerCase();
+    // Create copy of item list
+    var updatedList = todos;
+    // Include all elements which includes the search query
+    updatedList = updatedList.filter((item) => {
+      return item.Title.toLowerCase().includes(query);
+    });
+    // Trigger render with updated values
+    setFilteredList(updatedList);
   };
 
   useEffect(() => {
@@ -51,6 +70,7 @@ const Todos = () => {
           data.push({ ...doc.data(), id: doc.id });
         });
         setTodos(data);
+        setFilteredList(data);
       });
     };
 
@@ -75,11 +95,19 @@ const Todos = () => {
               <div className="btn" onClick={myTodos}>
                 My Todos
               </div>
+              <div className="btn" onClick={randTodos}>
+                Random Todos
+              </div>
             </div>
           )}
-          <input type="text" className="searchBox" placeholder="Search..." />
+          <input
+            type="search"
+            onChange={filterBySearch}
+            className="searchBox"
+            placeholder="Search..."
+          />
         </div>
-        {todos.map((todo) => {
+        {filteredList.map((todo) => {
           return <Todo key={todo.id} {...todo} />;
         })}
       </div>
