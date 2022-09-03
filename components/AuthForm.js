@@ -1,10 +1,8 @@
-import styles from "../styles/Home.module.css";
 import { useState, useEffect } from "react";
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   updateProfile,
-  onAuthStateChanged,
 } from "firebase/auth";
 import { auth } from "../config/firebase-config";
 import { useRouter } from "next/router";
@@ -42,30 +40,30 @@ const AuthForm = () => {
   return (
     <>
       {true && (
-        <div className={styles.authContainer}>
-          <h1 className={styles.title}>Register / Log In</h1>
-          <p className={styles.text}>
+        <div className="authContainer">
+          <h1 className="title">Register / Log In</h1>
+          <p className="text">
             To Add, Edit or Delete Todos, please Register or Log In.
           </p>
 
-          <div className={styles.registerForm}>
-            <h1 className={styles.title}>{method} form</h1>
+          <div className="registerForm">
+            <h1 className="title">{method} form</h1>
             {method === "Register" && (
               <input
-                className={styles.inputField}
+                className="inputField"
                 type="text"
                 placeholder="Name"
                 onChange={(e) => setName(e.target.value)}
               />
             )}
             <input
-              className={styles.inputField}
+              className="inputField"
               type="email"
               placeholder="Email"
               onChange={(e) => setEmail(e.target.value)}
             />
             <input
-              className={styles.inputField}
+              className="inputField"
               type="password"
               placeholder="Password"
               onChange={(e) => setPassword(e.target.value)}
@@ -73,39 +71,33 @@ const AuthForm = () => {
 
             {method === "Register" ? (
               "Register" && (
-                <div className={styles.btn} onClick={register}>
+                <div className="btn" onClick={register}>
                   Register
                 </div>
               )
             ) : (
-              <div className={styles.btn} onClick={login}>
+              <div className="btn" onClick={login}>
                 Log In
               </div>
             )}
 
             {method === "Register" ? (
-              <p className={styles.text}>
+              <p className="text">
                 Already have an account?{" "}
-                <span
-                  onClick={() => setMethod("Log In")}
-                  className={styles.link}
-                >
+                <span onClick={() => setMethod("Log In")} className="link">
                   Log In.
                 </span>
               </p>
             ) : (
-              <p className={styles.text}>
+              <p className="text">
                 Don&apos;t have an account?{" "}
-                <span
-                  onClick={() => setMethod("Register")}
-                  className={styles.link}
-                >
+                <span onClick={() => setMethod("Register")} className="link">
                   Register.
                 </span>
               </p>
             )}
 
-            {error && <p className={styles.error}>{error}</p>}
+            {error && <p className="error">{error}</p>}
           </div>
         </div>
       )}
