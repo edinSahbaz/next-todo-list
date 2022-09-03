@@ -1,8 +1,12 @@
 import Link from "next/link";
 import Head from "next/head";
 import AuthForm from "../components/AuthForm";
+import { useContext } from "react";
+import { UserContext } from "./../context/AuthContext";
 
 export default function Home() {
+  const user = useContext(UserContext);
+
   return (
     <>
       <Head>
@@ -15,7 +19,7 @@ export default function Home() {
           <a className="btn">Open Todos Page</a>
         </Link>
       </div>
-      <AuthForm />
+      {!user && <AuthForm />}
     </>
   );
 }
