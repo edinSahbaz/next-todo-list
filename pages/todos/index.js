@@ -3,6 +3,9 @@ import Head from "next/head";
 import { useEffect, useState } from "react";
 import Todo from "../../components/Todo";
 import { auth, db } from "./../../config/firebase-config";
+import { useContext } from "react";
+import { UserContext } from "./../../context/AuthContext";
+import { useRouter } from "next/router";
 
 const Todos = () => {
   const todosCollectionRef = collection(db, "Todos");
@@ -12,12 +15,19 @@ const Todos = () => {
   const [Title, setTitle] = useState("");
   const [Descritpion, setDescription] = useState("");
 
+  const user = useContext(UserContext);
+  const router = useRouter();
+
   const showAdd = () => {
     setDisplay(true);
   };
 
   const closeModal = () => {
     setDisplay(false);
+  };
+
+  const myTodos = () => {
+    router.push("/todos/my-todos");
   };
 
   const addTodo = async () => {
@@ -35,6 +45,7 @@ const Todos = () => {
       const data = await getDocs(todosCollectionRef);
       setTodos(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
     };
+
     getData();
   }, [todos]);
 
@@ -46,11 +57,17 @@ const Todos = () => {
       <div>
         <div className="title">
           <h1>Todos</h1>
-          <div className="btns">
-            <div className="btn" onClick={showAdd}>
-              Add Todo
+          {user && (
+            <div className="group">
+              <div className="btn" onClick={showAdd}>
+                Add Todo
+              </div>
+              <div className="btn" onClick={myTodos}>
+                My Todos
+              </div>
             </div>
-          </div>
+          )}
+          <input type="text" className="searchBox" placeholder="Search..." />
         </div>
         {todos.map((todo) => {
           return <Todo key={todo.id} {...todo} />;
