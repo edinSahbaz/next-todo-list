@@ -14,10 +14,7 @@ const MyTodos = () => {
 
   useEffect(() => {
     const getData = () => {
-      const q = query(
-        todosCollectionRef,
-        where("Author", "==", "test@test.com")
-      );
+      const q = query(todosCollectionRef, where("Author", "==", user.email));
 
       onSnapshot(q, (snapshot) => {
         let data = [];
@@ -25,8 +22,6 @@ const MyTodos = () => {
         snapshot.docs.forEach((doc) => {
           data.push({ ...doc.data(), id: doc.id });
         });
-        console.log("EFFECT RAN");
-
         setTodos(data);
       });
     };

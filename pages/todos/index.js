@@ -1,4 +1,4 @@
-import { addDoc, collection, getDocs } from "firebase/firestore";
+import { addDoc, collection, onSnapshot, query } from "firebase/firestore";
 import Head from "next/head";
 import { useEffect, useState } from "react";
 import Todo from "../../components/Todo";
@@ -41,13 +41,23 @@ const Todos = () => {
   };
 
   useEffect(() => {
-    const getData = async () => {
-      const data = await getDocs(todosCollectionRef);
-      setTodos(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+    const getData = () => {
+      const q = query(todosCollectionRef);
+
+      onSnapshot(q, (snapshot) => {
+        let data = [];
+
+        snapshot.docs.forEach((doc) => {
+          data.push({ ...doc.data(), id: doc.id });
+        });
+        setTodos(data);
+      });
     };
 
     getData();
-  }, [todos]);
+
+    getData();
+  }, []);
 
   return (
     <>
